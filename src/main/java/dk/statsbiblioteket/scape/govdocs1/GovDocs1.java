@@ -4,9 +4,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,14 +26,15 @@ public class GovDocs1 {
 
     private List<GroundTruthBean> groundTruthBeans;
 
-    public GovDocs1(File datafilesDir) throws FileNotFoundException, URISyntaxException {
+    public GovDocs1(File datafilesDir) throws IOException, URISyntaxException {
         this.datafilesDir = datafilesDir;
-        URL truthCSV = Thread.currentThread().getContextClassLoader().getResource("complete.csv");
-        groundTruthBeans = readGroundTruths(new File(truthCSV.toURI()));
+        InputStream truthCSV = Thread.currentThread().getContextClassLoader().getResourceAsStream("complete.csv");
+        groundTruthBeans = readGroundTruths(truthCSV);
+        truthCSV.close();
     }
 
-    private List<GroundTruthBean> readGroundTruths(File groundTruthCsv) throws FileNotFoundException {
-        CSVReader reader = new CSVReader(new FileReader(groundTruthCsv),'\t');
+    private List<GroundTruthBean> readGroundTruths(InputStream groundTruthCsv) throws IOException {
+        CSVReader reader = new CSVReader(new InputStreamReader(groundTruthCsv),'\t');
         ColumnPositionMappingStrategy<GroundTruthBean> strat = new ColumnPositionMappingStrategy<GroundTruthBean>();
         strat.setColumnMapping(new String[]{"accuracy", "mime", "charset", "digest", "extensions", "filename", "id", "kind", "size", "version"});
         strat.setType(GroundTruthBean.class);

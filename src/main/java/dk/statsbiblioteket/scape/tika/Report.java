@@ -1,6 +1,6 @@
 package dk.statsbiblioteket.scape.tika;
 
-import com.sun.xml.internal.fastinfoset.algorithm.IntegerEncodingAlgorithm;
+
 
 import javax.swing.*;
 import java.util.*;
