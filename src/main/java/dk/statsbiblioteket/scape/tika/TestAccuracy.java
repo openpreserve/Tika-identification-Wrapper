@@ -37,12 +37,6 @@ public class TestAccuracy {
 
             List<File> datafiles = govDocs1.getDatafiles();
 
-            List<GroundTruthBean> groundTruthList = govDocs1.getGroundTruthBeans();
-            Map<String, GroundTruthBean> truths = new HashMap<String, GroundTruthBean>();
-            for (GroundTruthBean groundTruthBean : groundTruthList) {
-                truths.put(groundTruthBean.getFilename(),groundTruthBean);
-            }
-
 
 
             for (File file : datafiles) {
@@ -51,8 +45,12 @@ public class TestAccuracy {
                 }
 
                 String filename = file.getName();
-                filename = filename.substring(0,filename.lastIndexOf("."));
-                GroundTruthBean truth = truths.get(filename);
+                int pos = filename.lastIndexOf(".");
+                if (pos < 0){
+                    continue;
+                }
+                filename = filename.substring(0,pos).intern();
+                GroundTruthBean truth = govDocs1.getGroundTruthBean(filename);
                 if (truth == null){
                     continue;
                 }
@@ -60,7 +58,7 @@ public class TestAccuracy {
                 Identity detection = sw.detect(file);
 
                 filesScanned++;
-                boolean found = truth.getMimes().contains(detection.getMime());
+                boolean found = truth.isOfMime(detection.getMime());
                 report.reportTime(detection.getTime());
                 if (! found){
                     filesInError++;
@@ -68,7 +66,7 @@ public class TestAccuracy {
 
                     System.out.println();
                     System.out.println(filename);
-                    System.out.println("Detected as: "+detection);
+                    System.out.println("Detected as: "+detection.getMime());
                     System.out.println("Groundtruth as "+truth.getMime());
                 } else {
                     report.reportRight(truth.getMime());

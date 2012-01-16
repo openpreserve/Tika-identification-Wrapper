@@ -21,6 +21,8 @@ public class Report {
     Map<Long,Integer> times = new TreeMap<Long, Integer>();
 
     public void reportWrong(String truthMime, String detection) {
+        truthMime = truthMime.intern();
+        detection = detection.intern();
         Map<String, Integer> detectionsForThisTruth = wrongs.get(truthMime);
         if (detectionsForThisTruth == null){
             detectionsForThisTruth = new HashMap<String, Integer>();
@@ -37,6 +39,7 @@ public class Report {
     }
 
     public void reportRight(String truthMime) {
+        truthMime = truthMime.intern();
         Integer detectionForThisTruth = rights.get(truthMime);
         if (detectionForThisTruth == null){
             detectionForThisTruth = 0;
@@ -56,7 +59,11 @@ public class Report {
             if (rightIdentifications == null){
                 rightIdentifications = 0;
             }
-            result.append("For mime '").append(truthMime).append("' we made "+rightIdentifications+" correct identifications, and these wrong identifications:\n");
+            result.append("For mime '")
+                    .append(truthMime)
+                    .append("' we made ")
+                    .append(rightIdentifications)
+                    .append(" correct identifications, and these wrong identifications:\n");
             Map<String, Integer> identifications = wrongs.get(truthMime);
             for (String identification : identifications.keySet()) {
                 result.append("    ").append(identification).append("  :   ")

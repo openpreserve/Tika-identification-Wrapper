@@ -7,9 +7,7 @@ import au.com.bytecode.opencsv.bean.CsvToBean;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,13 +22,19 @@ public class GovDocs1 {
     private File datafilesDir;
 
 
-    private List<GroundTruthBean> groundTruthBeans;
+    private Map<String,GroundTruthBean> groundTruthBeans;
 
     public GovDocs1(File datafilesDir) throws IOException, URISyntaxException {
         this.datafilesDir = datafilesDir;
         InputStream truthCSV = Thread.currentThread().getContextClassLoader().getResourceAsStream("complete.csv");
-        groundTruthBeans = readGroundTruths(truthCSV);
+        List<GroundTruthBean> beans = readGroundTruths(truthCSV);
         truthCSV.close();
+
+        groundTruthBeans = new HashMap<String, GroundTruthBean>(beans.size());
+        for (GroundTruthBean bean : beans) {
+            groundTruthBeans.put(bean.getFilename(),bean);
+        }
+
     }
 
     private List<GroundTruthBean> readGroundTruths(InputStream groundTruthCsv) throws IOException {
@@ -39,14 +43,12 @@ public class GovDocs1 {
         strat.setColumnMapping(new String[]{"accuracy", "mime", "charset", "digest", "extensions", "filename", "id", "kind", "size", "version"});
         strat.setType(GroundTruthBean.class);
         CsvToBean<GroundTruthBean> csv = new CsvToBean<GroundTruthBean>();
-        List<GroundTruthBean> truthBeanList = csv.parse(strat, reader);
-
-
-        return truthBeanList;
+        return csv.parse(strat, reader);
     }
 
-    public List<GroundTruthBean> getGroundTruthBeans() {
-        return Collections.unmodifiableList(groundTruthBeans);
+
+    public GroundTruthBean getGroundTruthBean(String filename){
+        return groundTruthBeans.get(filename);
     }
 
     public File getDatafilesDir() {

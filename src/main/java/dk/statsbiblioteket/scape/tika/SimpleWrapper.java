@@ -41,7 +41,7 @@ public class SimpleWrapper {
         inputstream.close();
         if (read > 0){
             TikaInputStream stream = TikaInputStream.get(header);
-            String mime = detector.detect(stream, metadata).toString();
+            String mime = detector.detect(stream, metadata).toString().intern();
             long duration = System.currentTimeMillis() - before;
             return new Identity(input,mime,duration);
         }

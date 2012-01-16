@@ -15,7 +15,7 @@ public class GroundTruthBean {
 
     private String accuracy, mime, charset, digest, extensions, filename, id, kind, size, version;
 
-    private Set<String> mimes = new HashSet<String>();
+    private Set<String> mimes;
 
 
     public String getAccuracy() {
@@ -31,19 +31,22 @@ public class GroundTruthBean {
     }
 
     public void setMime(String mime) {
-        mime = mime.replaceAll("\\[","");
-        mime = mime.replaceAll("\\]","");
-        mime = mime.replaceAll("'","");
+        mime = mime.replaceAll("\\[", "").replaceAll("\\]","").replaceAll("'", "");
         String[] splits = mime.split(", ");
-        mimes.clear();
+
+        mimes = new HashSet<String>(splits.length);
         for (String split : splits) {
-            mimes.add(split);
+            mimes.add(split.intern());
         }
+        mimes = Collections.unmodifiableSet(mimes);
         this.mime = mime;
     }
 
+    public boolean isOfMime(String mime){
+        return mimes.contains(mime);
+    }
     public Set<String> getMimes() {
-        return Collections.unmodifiableSet(mimes);
+        return mimes;
     }
 
     public String getCharset() {
@@ -75,7 +78,7 @@ public class GroundTruthBean {
     }
 
     public void setFilename(String filename) {
-        this.filename = filename;
+        this.filename = filename.intern();
     }
 
     public String getId() {
@@ -107,6 +110,6 @@ public class GroundTruthBean {
     }
 
     public void setVersion(String version) {
-        this.version = version;
+        this.version = version.intern();
     }
 }

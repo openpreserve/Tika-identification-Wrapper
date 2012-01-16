@@ -11,20 +11,14 @@ import java.io.File;
  */
 public class Identity {
 
-    private File file;
-
     private String mime;
 
     private long time;
 
     public Identity(File file, String mime, long time) {
-        this.file = file;
+        //this.file = file;
         this.mime = mime;
         this.time = time;
-    }
-
-    public File getFile() {
-        return file;
     }
 
     public String getMime() {
@@ -34,4 +28,5 @@ public class Identity {
     public long getTime() {
         return time;
     }
+
 }

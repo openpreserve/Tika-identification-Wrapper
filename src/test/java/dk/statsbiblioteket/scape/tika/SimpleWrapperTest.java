@@ -24,6 +24,14 @@ public class SimpleWrapperTest {
     String govDocsData = "/home/abr/Downloads/000/000";
 
 
+/*
+
+    @org.junit.Test
+    public void testLoad() throws Exception {
+        GovDocs1 govdocs1 = new GovDocs1(null);
+    }
+*/
+
     @org.junit.Test
     public void testAccuracy() throws Exception {
         TestAccuracy.testAccuracy(govDocsData);
