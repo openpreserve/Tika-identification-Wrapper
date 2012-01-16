@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,5 +52,22 @@ public class GovDocs1 {
 
     public File getDatafilesDir() {
         return datafilesDir;
+    }
+
+    public List<File> getDatafiles() {
+        return getFiles(datafilesDir);
+    }
+
+    private List<File> getFiles(File dir){
+        List<File> result = new ArrayList<File>();
+        if (!dir.isDirectory()){
+            result.add(dir);
+            return result;
+        }
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            result.addAll(getFiles(file));
+        }
+        return result;
     }
 }

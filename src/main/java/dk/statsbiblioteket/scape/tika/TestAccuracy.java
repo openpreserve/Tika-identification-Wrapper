@@ -18,8 +18,6 @@ import java.util.Map;
 public class TestAccuracy {
 
      public static void main(String... args) throws Exception {
-         String inputDir = args[0];
-         String outFile = null;
          String govDocsData = null;
          if (args.length == 1) {
              govDocsData = args[1];
@@ -33,7 +31,7 @@ public class TestAccuracy {
         SimpleWrapper sw = new SimpleWrapper();
         GovDocs1 govDocs1 = new GovDocs1(new File(govDocsData));
 
-        File[] datafiles = govDocs1.getDatafilesDir().listFiles();
+        List<File> datafiles = govDocs1.getDatafiles();
 
         List<GroundTruthBean> groundTruthList = govDocs1.getGroundTruthBeans();
         Map<String, GroundTruthBean> truths = new HashMap<String, GroundTruthBean>();
@@ -56,14 +54,18 @@ public class TestAccuracy {
             if (truth == null){
                 continue;
             }
-            String detection = sw.detect(file);
+
+            Identity detection = sw.detect(file);
+
             filesScanned++;
-            boolean found = truth.getMimes().contains(detection);
+            boolean found = truth.getMimes().contains(detection.getMime());
+            report.reportTime(detection.getTime());
             if (! found){
                 filesInError++;
+                report.reportWrong(truth.getMime(), detection.getMime());
+
                 System.out.println();
                 System.out.println(filename);
-                report.reportWrong(truth.getMime(), detection);
                 System.out.println("Detected as: "+detection);
                 System.out.println("Groundtruth as "+truth.getMime());
             } else {

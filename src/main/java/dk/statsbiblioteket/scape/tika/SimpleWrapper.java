@@ -31,8 +31,8 @@ public class SimpleWrapper {
     }
 
 
-    public String detect(File input) throws IOException {
-
+    public Identity detect(File input) throws IOException {
+        long before = System.currentTimeMillis();
         Metadata metadata = new Metadata();
         metadata.set(Metadata.RESOURCE_NAME_KEY,input.getAbsolutePath());
         byte[] header = new byte[8*1024];
@@ -41,11 +41,13 @@ public class SimpleWrapper {
         inputstream.close();
         if (read > 0){
             TikaInputStream stream = TikaInputStream.get(header);
-            return detector.detect(stream, metadata).toString();
+            String mime = detector.detect(stream, metadata).toString();
+            long duration = System.currentTimeMillis() - before;
+            return new Identity(input,mime,duration);
         }
-
         return null;
     }
+/*
 
     public List<Identity> detect(List<File> files){
         List<Identity> result = new ArrayList<Identity>();
@@ -111,5 +113,6 @@ public class SimpleWrapper {
         }
         writer.flush();
     }
+*/
 
 }

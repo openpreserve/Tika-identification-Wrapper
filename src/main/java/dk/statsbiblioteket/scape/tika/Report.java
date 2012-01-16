@@ -1,7 +1,9 @@
 package dk.statsbiblioteket.scape.tika;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.sun.xml.internal.fastinfoset.algorithm.IntegerEncodingAlgorithm;
+
+import javax.swing.*;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,6 +18,7 @@ public class Report {
     Map<String,Map<String,Integer>> wrongs = new HashMap<String, Map<String,Integer>>();
     Map<String,Integer> rights = new HashMap<String, Integer>();
 
+    Map<Long,Integer> times = new TreeMap<Long, Integer>();
 
     public void reportWrong(String truthMime, String detection) {
         Map<String, Integer> detectionsForThisTruth = wrongs.get(truthMime);
@@ -60,6 +63,24 @@ public class Report {
                         .append(identifications.get(identification)).append("\n");
             }
         }
+        result.append("\n");
+        List<Long> timeList = new ArrayList<Long>();
+        timeList.addAll(times.keySet());
+        Collections.sort(timeList);
+        for (Long time : timeList) {
+            result.append(times.get(time)).append(" files were identified in ").append(time).append("ms \n");
+        }
         return result.toString();
+    }
+
+
+
+    public void reportTime(long time) {
+        Integer hits = times.get(time);
+        if (hits == null){
+            hits = 0;
+        }
+        hits++;
+        times.put(time,hits);
     }
 }
