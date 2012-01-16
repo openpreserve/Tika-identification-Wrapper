@@ -3,6 +3,7 @@ package dk.statsbiblioteket.scape.govdocs1;
 import dk.statsbiblioteket.scape.tika.SimpleWrapper;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -22,7 +23,6 @@ public class GovDocs1Test {
 
     @org.junit.Test
     public void testLoad() throws Exception {
-        GovDocs1 govdocs1 = new GovDocs1(null, new File("/home/abr/Downloads/groundtruth-fitools/complete.csv"));
-
+        GovDocs1 govdocs1 = new GovDocs1(null);
     }
 }

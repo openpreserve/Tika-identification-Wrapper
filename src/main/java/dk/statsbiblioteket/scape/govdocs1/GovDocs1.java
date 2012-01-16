@@ -7,6 +7,8 @@ import au.com.bytecode.opencsv.bean.CsvToBean;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,10 +27,10 @@ public class GovDocs1 {
 
     private List<GroundTruthBean> groundTruthBeans;
 
-    public GovDocs1(File datafilesDir, File groundTruthCsv) throws FileNotFoundException {
+    public GovDocs1(File datafilesDir) throws FileNotFoundException, URISyntaxException {
         this.datafilesDir = datafilesDir;
-
-        groundTruthBeans = readGroundTruths(groundTruthCsv);
+        URL truthCSV = Thread.currentThread().getContextClassLoader().getResource("complete.csv");
+        groundTruthBeans = readGroundTruths(new File(truthCSV.toURI()));
     }
 
     private List<GroundTruthBean> readGroundTruths(File groundTruthCsv) throws FileNotFoundException {
@@ -36,12 +38,11 @@ public class GovDocs1 {
         ColumnPositionMappingStrategy<GroundTruthBean> strat = new ColumnPositionMappingStrategy<GroundTruthBean>();
         strat.setColumnMapping(new String[]{"accuracy", "mime", "charset", "digest", "extensions", "filename", "id", "kind", "size", "version"});
         strat.setType(GroundTruthBean.class);
-        String [] nextLine;
         CsvToBean<GroundTruthBean> csv = new CsvToBean<GroundTruthBean>();
-        List<GroundTruthBean> list = csv.parse(strat, reader);
+        List<GroundTruthBean> truthBeanList = csv.parse(strat, reader);
 
 
-        return list;
+        return truthBeanList;
     }
 
     public List<GroundTruthBean> getGroundTruthBeans() {
