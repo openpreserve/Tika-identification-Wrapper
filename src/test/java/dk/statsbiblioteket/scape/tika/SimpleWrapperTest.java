@@ -21,7 +21,7 @@ import java.util.*;
 public class SimpleWrapperTest {
 
 
-    String govDocsData = "/home/abr/Downloads/000/000";
+    String govDocsData = "/home/abr/Downloads/000/";
 
 
 /*

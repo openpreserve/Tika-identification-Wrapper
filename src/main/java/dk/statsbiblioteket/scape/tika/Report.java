@@ -54,7 +54,9 @@ public class Report {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (String truthMime : wrongs.keySet()) {
+        ArrayList<String> wrongKeys = new ArrayList<String>(wrongs.keySet());
+        Collections.sort(wrongKeys);
+        for (String truthMime : wrongKeys) {
             Integer rightIdentifications = rights.get(truthMime);
             if (rightIdentifications == null){
                 rightIdentifications = 0;
@@ -65,7 +67,9 @@ public class Report {
                     .append(rightIdentifications)
                     .append(" correct identifications, and these wrong identifications:\n");
             Map<String, Integer> identifications = wrongs.get(truthMime);
-            for (String identification : identifications.keySet()) {
+            ArrayList<String> identificationKeys = new ArrayList<String>(identifications.keySet());
+            Collections.sort(identificationKeys);
+            for (String identification : identificationKeys) {
                 result.append("    ").append(identification).append("  :   ")
                         .append(identifications.get(identification)).append("\n");
             }

@@ -44,6 +44,7 @@ public class TestAccuracy {
                     continue;
                 }
 
+                String oldfilename = file.getName();
                 String filename = file.getName();
                 int pos = filename.lastIndexOf(".");
                 if (pos < 0){
@@ -65,10 +66,11 @@ public class TestAccuracy {
                     report.reportWrong(truth.getMime(), detection.getMime());
 
                     System.out.println();
-                    System.out.println(filename);
+                    System.out.println(oldfilename);
                     System.out.println("Detected as: "+detection.getMime());
                     System.out.println("Groundtruth as "+truth.getMime());
                 } else {
+                    System.out.println(oldfilename);
                     report.reportRight(truth.getMime());
                 }
 

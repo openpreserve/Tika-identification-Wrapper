@@ -56,7 +56,9 @@ public class GovDocs1 {
     }
 
     public List<File> getDatafiles() {
-        return getFiles(datafilesDir);
+        List<File> files = getFiles(datafilesDir);
+        Collections.sort(files);
+        return files;
     }
 
     private List<File> getFiles(File dir){
