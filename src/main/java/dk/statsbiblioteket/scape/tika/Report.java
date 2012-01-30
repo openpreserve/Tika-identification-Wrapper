@@ -20,7 +20,7 @@ public class Report {
 
     Map<Long,Integer> times = new TreeMap<Long, Integer>();
 
-    public void reportWrong(String truthMime, String detection) {
+    public synchronized void reportWrong(String truthMime, String detection) {
         truthMime = truthMime.intern();
         detection = detection.intern();
         Map<String, Integer> detectionsForThisTruth = wrongs.get(truthMime);
@@ -38,7 +38,7 @@ public class Report {
         }
     }
 
-    public void reportRight(String truthMime) {
+    public synchronized void reportRight(String truthMime) {
         truthMime = truthMime.intern();
         Integer detectionForThisTruth = rights.get(truthMime);
         if (detectionForThisTruth == null){
@@ -54,9 +54,11 @@ public class Report {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        ArrayList<String> wrongKeys = new ArrayList<String>(wrongs.keySet());
-        Collections.sort(wrongKeys);
-        for (String truthMime : wrongKeys) {
+        HashSet<String> keySet = new HashSet<String>(wrongs.keySet());
+        keySet.addAll(rights.keySet());
+        ArrayList<String> keys = new ArrayList<String>(keySet);
+        Collections.sort(keys);
+        for (String truthMime : keys) {
             Integer rightIdentifications = rights.get(truthMime);
             if (rightIdentifications == null){
                 rightIdentifications = 0;
@@ -67,6 +69,9 @@ public class Report {
                     .append(rightIdentifications)
                     .append(" correct identifications, and these wrong identifications:\n");
             Map<String, Integer> identifications = wrongs.get(truthMime);
+            if (identifications == null){
+                continue;
+            }
             ArrayList<String> identificationKeys = new ArrayList<String>(identifications.keySet());
             Collections.sort(identificationKeys);
             for (String identification : identificationKeys) {
