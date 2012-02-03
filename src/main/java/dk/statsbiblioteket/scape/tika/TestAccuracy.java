@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class TestAccuracy {
 
-    public static void main(String... args) throws Exception {
+    public static void main(String... args) {
         String govDocsData = null;
         if (args.length == 1) {
             govDocsData = args[0];
@@ -26,7 +26,7 @@ public class TestAccuracy {
     }
 
 
-    public static void testAccuracy(String govDocsData) throws Exception {
+    public static void testAccuracy(String govDocsData) {
         Report report = new Report();
         int filesScanned = 0;
         int filesInError = 0;
@@ -38,14 +38,12 @@ public class TestAccuracy {
             List<File> datafiles = govDocs1.getDatafiles();
 
 
+            List<Identity> identities = sw.identify(datafiles);
 
-            for (File file : datafiles) {
-                if (!file.isFile()){
-                    continue;
-                }
+            for (Identity identity : identities) {
 
-                String oldfilename = file.getName();
-                String filename = file.getName();
+                String oldfilename = identity.getFile().getName();
+                String filename = oldfilename;
                 int pos = filename.lastIndexOf(".");
                 if (pos < 0){
                     continue;
@@ -56,26 +54,28 @@ public class TestAccuracy {
                     continue;
                 }
 
-                Identity detection = sw.detect(file);
-
                 filesScanned++;
-                boolean found = truth.isOfMime(detection.getMime());
-                report.reportTime(detection.getTime());
+                boolean found = truth.isOfMime(identity.getMime());
+                report.reportTime(identity.getTime());
                 if (! found){
                     filesInError++;
-                    report.reportWrong(truth.getMime(), detection.getMime());
+                    report.reportWrong(truth.getMime(), identity.getMime());
 
                     System.out.println();
                     System.out.println(oldfilename);
-                    System.out.println("Detected as: "+detection.getMime());
+                    System.out.println("Detected as: "+identity.getMime());
                     System.out.println("Groundtruth as "+truth.getMime());
                 } else {
-                    System.out.println(oldfilename);
                     report.reportRight(truth.getMime());
                 }
 
             }
-        } finally {
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+
+        }
+        finally {
             System.out.println("Files scanned "+filesScanned);
             System.out.println("Files in error "+filesInError);
             System.out.println(report.toString());

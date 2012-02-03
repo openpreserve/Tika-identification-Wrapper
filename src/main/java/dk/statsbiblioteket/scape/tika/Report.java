@@ -63,21 +63,22 @@ public class Report {
             if (rightIdentifications == null){
                 rightIdentifications = 0;
             }
-            result.append("For mime '")
+            result.append("")
                     .append(truthMime)
-                    .append("' we made ")
+                    .append(":")
                     .append(rightIdentifications)
-                    .append(" correct identifications, and these wrong identifications:\n");
+                    .append(":");
+
+                    //.append(" correct identifications, and these wrong identifications:\n");
             Map<String, Integer> identifications = wrongs.get(truthMime);
-            if (identifications == null){
-                continue;
+            Integer total = rightIdentifications;
+            if (identifications != null){
+                for (int count : identifications.values()) {
+                    total += count;
+                }
+
             }
-            ArrayList<String> identificationKeys = new ArrayList<String>(identifications.keySet());
-            Collections.sort(identificationKeys);
-            for (String identification : identificationKeys) {
-                result.append("    ").append(identification).append("  :   ")
-                        .append(identifications.get(identification)).append("\n");
-            }
+            result.append(total).append("\n");
         }
         result.append("\n");
         List<Long> timeList = new ArrayList<Long>();

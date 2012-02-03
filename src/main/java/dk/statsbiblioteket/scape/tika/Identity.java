@@ -14,9 +14,10 @@ public class Identity {
     private String mime;
 
     private long time;
+    private File file;
 
     public Identity(File file, String mime, long time) {
-        //this.file = file;
+        this.file = file;
         this.mime = mime;
         this.time = time;
     }
@@ -29,4 +30,7 @@ public class Identity {
         return time;
     }
 
+    public File getFile() {
+        return file;
+    }
 }
