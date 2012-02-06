@@ -45,10 +45,10 @@ public class TestAccuracy {
                 String oldfilename = identity.getFile().getName();
                 String filename = oldfilename;
                 int pos = filename.lastIndexOf(".");
-                if (pos < 0){
-                    continue;
+                if (pos > 0){
+                    filename = filename.substring(0,pos).intern();
                 }
-                filename = filename.substring(0,pos).intern();
+
                 GroundTruthBean truth = govDocs1.getGroundTruthBean(filename);
                 if (truth == null){
                     continue;

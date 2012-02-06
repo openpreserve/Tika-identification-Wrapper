@@ -32,10 +32,8 @@ public class SimpleWrapper {
     public Identity detect(File input) throws IOException {
         long before = System.currentTimeMillis();
         Metadata metadata = new Metadata();
-        metadata.set(Metadata.RESOURCE_NAME_KEY,"resource");
-
-        FileInputStream fileInputStream = new FileInputStream(input);
-        TikaInputStream stream = TikaInputStream.get(fileInputStream);
+        metadata.set(Metadata.RESOURCE_NAME_KEY,input.getName());
+        TikaInputStream stream = TikaInputStream.get(input,metadata);
         MediaType mediaType = detector.detect(stream, metadata);
         stream.close();
         String mime = mediaType.toString().intern();
