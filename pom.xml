@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.statsbiblioteket.scape.tika</groupId>
     <artifactId>tikaWrapper</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
 
 
     <build>
@@ -73,7 +73,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>dk.statsbiblioteket.scape.tika.TestAccuracy</mainClass>
+                            <mainClass>dk.statsbiblioteket.scape.tika.SimpleWrapper</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -87,7 +87,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>dk.statsbiblioteket.scape.tika.TestAccuracy</mainClass>
+                            <mainClass>dk.statsbiblioteket.scape.tika.SimpleWrapper</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
